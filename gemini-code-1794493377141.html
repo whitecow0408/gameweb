@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>즐거운 명절 | 순발력 대화 캐주얼 시뮬레이션</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-warm: #FFFDF7;
+      --bg-card: #FFFFFF;
+      --primary-red: #D93829;     /* 붉은 복주머니/경고 포인트 */
+      --primary-gold: #F2A900;    /* 명절 황금빛 포인트 */
+      --accent-teal: #1E6B7B;     /* 전통 청록 포인트 */
+      --text-dark: #1F2421;
+      --text-muted: #5C635E;
+      --border-light: #E8E2D5;
+      --shadow: 0 10px 30px rgba(31, 36, 33, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background-color: var(--bg-warm);
+      color: var(--text-dark);
+      line-height: 1.65;
+      word-break: keep-all;
+    }
+
+    /* 상단 네비게이션 */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 253, 247, 0.9);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .nav-container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: 1.5rem;
+      color: var(--primary-red);
+      text-decoration: none;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-dark);
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary-red);
+    }
+
+    /* 히어로 섹션 */
+    .hero {
+      padding: 80px 20px 70px;
+      text-align: center;
+      background: radial-gradient(circle at top, #FFF3D6 0%, var(--bg-warm) 70%);
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .badge {
+      display: inline-block;
+      background: #FFE5E2;
+      color: var(--primary-red);
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 6px 14px;
+      border-radius: 999px;
+      margin-bottom: 16px;
+      border: 1px solid rgba(217, 56, 41, 0.2);
+    }
+
+    .hero h1 {
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: clamp(2.8rem, 6vw, 4.5rem);
+      color: var(--text-dark);
+      margin-bottom: 12px;
+      line-height: 1.15;
+    }
+
+    .hero h1 span {
+      color: var(--primary-red);
+    }
+
+    .hero .subtitle {
+      font-size: clamp(1.05rem, 2.2vw, 1.3rem);
+      color: var(--text-muted);
+      max-width: 680px;
+      margin: 0 auto 28px;
+      font-weight: 500;
+    }
+
+    .hero-meta {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 34px;
+    }
+
+    .meta-tag {
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--accent-teal);
+    }
+
+    .cta-group {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: transform 0.15s, box-shadow 0.15s;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-primary {
+      background: var(--primary-red);
+      color: #fff;
+      box-shadow: 0 6px 20px rgba(217, 56, 41, 0.28);
+    }
+
+    .btn-secondary {
+      background: var(--bg-card);
+      color: var(--text-dark);
+      border: 1px solid var(--border-light);
+    }
+
+    /* 공통 섹션 스타일 */
+    section {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 72px 20px;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 44px;
+    }
+
+    .section-header .eyebrow {
+      color: var(--primary-red);
+      font-weight: 700;
+      font-size: 0.88rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .section-header h2 {
+      font-size: clamp(1.7rem, 3.5vw, 2.3rem);
+      font-weight: 900;
+    }
+
+    /* 기획 의도 & 핵심 가치 카드 */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: 18px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+    }
+
+    .card-icon {
+      font-size: 2rem;
+      margin-bottom: 14px;
+      display: inline-block;
+    }
+
+    .card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      font-weight: 800;
+    }
+
+    .card p {
+      color: var(--text-muted);
+      font-size: 0.96rem;
+    }
+
+    /* 인생 3단계 서사 타임라인 */
+    .stages {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 20px;
+    }
+
+    .stage-card {
+      background: var(--bg-card);
+      border: 2px solid var(--border-light);
+      border-radius: 18px;
+      padding: 26px;
+      position: relative;
+      transition: border-color 0.2s;
+    }
+
+    .stage-card:hover {
+      border-color: var(--primary-gold);
+    }
+
+    .stage-num {
+      display: inline-block;
+      background: var(--primary-gold);
+      color: #1F2421;
+      font-weight: 900;
+      font-size: 0.82rem;
+      padding: 4px 10px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+    }
+
+    .stage-card h3 {
+      font-size: 1.25rem;
+      margin-bottom: 8px;
+    }
+
+    .stage-quote {
+      margin-top: 14px;
+      padding: 12px 14px;
+      background: #FFF9EB;
+      border-left: 3px solid var(--primary-gold);
+      border-radius: 6px;
+      font-size: 0.9rem;
+      color: #5A4618;
+      font-weight: 600;
+    }
+
+    /* 핵심 게임 루프 & 미니 체험 섹션 */
+    .demo-box {
+      background: #1F2421;
+      color: #FFFDF7;
+      border-radius: 24px;
+      padding: 36px 28px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.16);
+    }
+
+    .demo-status {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+      margin-bottom: 24px;
+    }
+
+    .gauge-wrap {
+      flex: 1;
+      min-width: 220px;
+    }
+
+    .gauge-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.88rem;
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+
+    .gauge-bar {
+      height: 12px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .gauge-fill {
+      height: 100%;
+      width: 40%;
+      background: linear-gradient(90deg, #F2A900, #D93829);
+      transition: width 0.35s ease;
+    }
+
+    .relative-speech {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 22px;
+      margin-bottom: 20px;
+    }
+
+    .relative-name {
+      color: var(--primary-gold);
+      font-weight: 800;
+      font-size: 0.92rem;
+      margin-bottom: 6px;
+    }
+
+    .relative-text {
+      font-size: 1.15rem;
+      font-weight: 600;
+    }
+
+    .choices {
+      display: grid;
+      gap: 12px;
+    }
+
+    .choice-btn {
+      text-align: left;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 15px 18px;
+      border-radius: 12px;
+      font-size: 0.98rem;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .choice-btn:hover {
+      background: rgba(242, 169, 0, 0.2);
+      border-color: var(--primary-gold);
+    }
+
+    .demo-feedback {
+      margin-top: 18px;
+      padding: 14px 18px;
+      border-radius: 12px;
+      background: rgba(30, 107, 123, 0.35);
+      border: 1px solid #4DB6AC;
+      font-size: 0.95rem;
+      display: none;
+    }
+
+    /* MVP 구현 범위 리스트 */
+    .mvp-list {
+      display: grid;
+      gap: 16px;
+    }
+
+    .mvp-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      padding: 22px;
+      border-radius: 16px;
+    }
+
+    .mvp-badge {
+      background: var(--accent-teal);
+      color: #fff;
+      font-weight: 800;
+      font-size: 0.82rem;
+      padding: 6px 12px;
+      border-radius: 8px;
+      white-space: nowrap;
+    }
+
+    /* 푸터 */
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      border-top: 1px solid var(--border-light);
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 상단 네비게이션 -->
+  <header>
+    <div class="nav-container">
+      <a href="#" class="logo">즐거운 명절 🧧</a>
+      <ul class="nav-links">
+        <li><a href="#overview">게임 소개</a></li>
+        <li><a href="#stages">인생 3장</a></li>
+        <li><a href="#demo">미니 체험</a></li>
+        <li><a href="#mvp">핵심 기능</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- 히어로 영역 -->
+  <div class="hero">
+    <span class="badge">순발력 대화 캐주얼 시뮬레이션</span>
+    <h1><span>“즐거운”</span> 명절</h1>
+    <p class="subtitle">
+      명절 친척들의 매서운 잔소리를 제한시간 2분 안에 최적의 대화 선택지로 방어하며 버텨내는 실시간 눈치싸움 생존 게임
+    </p>
+    <div class="hero-meta">
+      <span class="meta-tag">📱 PC &amp; 모바일 하이브리드</span>
+      <span class="meta-tag">⏱️ 2분 실시간 심리전</span>
+      <span class="meta-tag">💥 사이다 대리만족 컷씬</span>
+    </div>
+    <div class="cta-group">
+      <a href="#demo" class="btn btn-primary">명절 잔소리 방어 체험하기</a>
+      <a href="#overview" class="btn btn-secondary">기획 의도 살펴보기</a>
+    </div>
+  </div>
+
+  <!-- Q1 & Q2: 개요 및 기획 배경 -->
+  <section id="overview">
+    <div class="section-header">
+      <span class="eyebrow">Concept &amp; Background</span>
+      <h2>이름만 ‘즐거운’ 명절의 반전 매력</h2>
+    </div>
+    <div class="grid-3">
+      <div class="card">
+        <span class="card-icon">🎭</span>
+        <h3>반어법 타이틀의 병맛 감성</h3>
+        <p>
+          긍정적이고 평화로운 제목으로 방심을 유도한 뒤, 숨 막히는 질문 공세와 스트레스 게이지로 반전 재미를 극대화했습니다.
+        </p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🧠</span>
+        <h3>현실 눈치싸움의 게임화</h3>
+        <p>
+          관계 악화를 걱정해 속마음을 삼키고 돌려 말해야 했던 명절의 치열한 두뇌 회전을 실시간 선택지 시스템으로 옮겼습니다.
+        </p>
+      </div>
+      <div class="card">
+        <span class="card-icon">🥤</span>
+        <h3>사이다 게임오버 카타르시스</h3>
+        <p>
+          단순 스트레스 누적에 그치지 않고, 현실에서 차마 내뱉지 못한 대찬 발언과 통쾌한 게임오버 컷씬으로 대리만족을 선사합니다.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Q3: 인생 단계별 서사 -->
+  <section id="stages" style="padding-top: 20px;">
+    <div class="section-header">
+      <span class="eyebrow">Story Progression</span>
+      <h2>나이가 들수록 진화하는 잔소리 (1~3장)</h2>
+    </div>
+    <div class="stages">
+      <div class="stage-card">
+        <span class="stage-num">제 1장 · 고등학생</span>
+        <h3>학업과 성적 압박</h3>
+        <p>모의고사 등급부터 목표 대학까지, 명절 밥상머리의 첫 번째 관문을 돌파해야 합니다.</p>
+        <div class="stage-quote">“요즘 전교 몇 등 하니? 옆집 철수는 이번에 의대 갔다더라~”</div>
+      </div>
+      <div class="stage-card">
+        <span class="stage-num">제 2장 · 대학생</span>
+        <h3>스펙과 취업 전선</h3>
+        <p>학점, 자격증, 인턴, 군대 문제까지 한층 날카로워진 친척들의 연타 질문을 방어하세요.</p>
+        <div class="stage-quote">“졸업하면 바로 대기업 들어가야지? 요즘 취업 준비는 잘 되니?”</div>
+      </div>
+      <div class="stage-card">
+        <span class="stage-num">제 3장 · 취준생/백수</span>
+        <h3>미래와 결혼 최종 보스전</h3>
+        <p>연봉, 연애, 결혼 계획 등 최고 난이도의 질문과 돌발 상황을 버텨내는 최종 스테이지입니다.</p>
+        <div class="stage-quote">“만나는 사람은 있고? 나이가 몇인데 이제 자리 잡아야지!”</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 핵심 루프 & 인터랙티브 데모 -->
+  <section id="demo" style="padding-top: 20px;">
+    <div class="section-header">
+      <span class="eyebrow">Core Gameplay Loop</span>
+      <h2>2분 실시간 심리전 미리보기</h2>
+    </div>
+
+    <div class="demo-box">
+      <div class="demo-status">
+        <div>
+          <strong>🔥 스노우볼 악순환 시스템</strong>
+          <p style="font-size: 0.88rem; color: #CFCBC2;">오답 선택 시 친척 기분 하락 ➔ 내 스트레스 상승 ➔ 질문 난이도 급상승!</p>
+        </div>
+        <div class="gauge-wrap">
+          <div class="gauge-label">
+            <span>내 스트레스 게이지</span>
+            <span id="stress-text">40%</span>
+          </div>
+          <div class="gauge-bar">
+            <div class="gauge-fill" id="stress-bar"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="relative-speech">
+        <div class="relative-name">💬 큰이모 (공격력 ★★★★☆)</div>
+        <div class="relative-text" id="question-text">
+          “수호야, 요즘 졸업반이라 바쁘지? 어디 대기업 원서 넣은 데는 있고?”
+        </div>
+      </div>
+
+      <div class="choices">
+        <button class="choice-btn" onclick="selectChoice('safe')">
+          1. “하하, 요즘 공채 시즌이라 여기저기 열심히 준비하고 있어요! 이모 건강은 어떠세요?” (화제 전환)
+        </button>
+        <button class="choice-btn" onclick="selectChoice('wrong')">
+          2. “아직 정해진 게 없어서 좀 더 쉬려고요...” (방어 실패)
+        </button>
+        <button class="choice-btn" onclick="selectChoice('cider')">
+          3. “이모, 제 취업 걱정보다 사촌동생 성적표 먼저 보시는 게 어떨까요?” (사이다 폭주 💥)
+        </button>
+      </div>
+
+      <div class="demo-feedback" id="feedback-box"></div>
+    </div>
+  </section>
+
+  <!-- Q4: MVP 최소 구현 기능 -->
+  <section id="mvp" style="padding-top: 20px;">
+    <div class="section-header">
+      <span class="eyebrow">MVP Specifications</span>
+      <h2>핵심 구현 기능 (프로토타입)</h2>
+    </div>
+    <div class="mvp-list">
+      <div class="mvp-item">
+        <span class="mvp-badge">필수 기능 1</span>
+        <div>
+          <h3>2분 타이머 기반 대화 &amp; 3분기 선택지 시스템</h3>
+          <p style="color: var(--text-muted); margin-top: 4px;">
+            실시간으로 줄어드는 2분 타이머 속에서 친척의 질문에 3가지 선택지로 대응하며, 선택 결과에 따라 친척 기분과 플레이어 스트레스 게이지가 즉각 변동됩니다.
+          </p>
+        </div>
+      </div>
+      <div class="mvp-item">
+        <span class="mvp-badge">필수 기능 2</span>
+        <div>
+          <h3>핵심 재미 검증을 위한 1개 장(章) 집중 프로토타입</h3>
+          <p style="color: var(--text-muted); margin-top: 4px;">
+            전체 3개 스테이지 중 가장 공감이 높은 메인 스테이지 1종을 집중 구현해 대화 템포와 밸런스를 검증합니다.
+          </p>
+        </div>
+      </div>
+      <div class="mvp-item">
+        <span class="mvp-badge">필수 기능 3</span>
+        <div>
+          <h3>사촌동생 드래그 앤 드롭 돌발 미니 이벤트</h3>
+          <p style="color: var(--text-muted); margin-top: 4px;">
+            대화 도중 방으로 난입하는 사촌동생을 마우스 드래그로 이모부에게 보내 시선을 분산시키면, 일정 시간 이모부 대화 쿨타임 어드밴티지를 획득합니다.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 푸터 -->
+  <footer>
+    <p><strong>즐거운 명절</strong> — 게임 기획 및 프로토타입 소개 페이지</p>
+    <p style="margin-top: 4px;">기획·개발: 임수호 (2021779025)</p>
+  </footer>
+
+  <script>
+    function selectChoice(type) {
+      const bar = document.getElementById('stress-bar');
+      const text = document.getElementById('stress-text');
+      const feedback = document.getElementById('feedback-box');
+
+      feedback.style.display = 'block';
+
+      if (type === 'safe') {
+        bar.style.width = '25%';
+        text.textContent = '25% (방어 성공!)';
+        feedback.style.borderColor = '#4DB6AC';
+        feedback.style.background = 'rgba(30, 107, 123, 0.45)';
+        feedback.innerHTML = '✅ <strong>완벽한 화제 전환!</strong> 큰이모가 본인 건강 이야기를 시작하며 15초간 잔소리 쿨타임이 적용됩니다.';
+      } else if (type === 'wrong') {
+        bar.style.width = '75%';
+        text.textContent = '75% (위험! 스노우볼 발동)';
+        feedback.style.borderColor = '#F2A900';
+        feedback.style.background = 'rgba(242, 169, 0, 0.25)';
+        feedback.innerHTML = '⚠️ <strong>방어 실패!</strong> 큰이모의 기분이 하락하며 옆에 있던 삼촌까지 합세해 질문 난이도가 상승합니다!';
+      } else if (type === 'cider') {
+        bar.style.width = '100%';
+        text.textContent = '100% (사이다 엔딩 발동!)';
+        feedback.style.borderColor = '#D93829';
+        feedback.style.background = 'rgba(217, 56, 41, 0.35)';
+        feedback.innerHTML = '💥 <strong>GAME OVER — 사이다 대폭발 컷씬!</strong> 거실이 얼어붙었지만 속은 뻥 뚫렸습니다. 다음 명절엔 만날 수 있을까요?';
+      }
+    }
+  </script>
+</body>
+</html>
